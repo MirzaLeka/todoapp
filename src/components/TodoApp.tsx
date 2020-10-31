@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Todo from "./Todo";
 import { List } from "@material-ui/core";
 import Input from "./Input";
@@ -6,7 +6,17 @@ import { useTodos } from "./store";
 import { Transition } from "react-spring/renderprops";
 
 const TodoApp = () => {
-  const { todos, addTodo } = useTodos();
+
+  const { todos, addTodo, fetchTodos, setTodos } = useTodos();
+
+  useEffect(() => {
+    getTodos();
+  }, [todos])
+
+  const getTodos = () => fetchTodos().then((data: any) => {
+    setTodos(data);
+  })
+
   return (
     <div>
       <Input addTodo={addTodo} />

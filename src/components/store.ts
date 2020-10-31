@@ -1,32 +1,18 @@
 import create from "zustand";
-import { Todo } from "./types";
+import * as service from '../service/firebase-service';
 
 export const useTodos = create<any>((set) => ({
-  todos: [{ todo: "Get Milk", done: true, key: 0 }],
 
-  addTodo: (todo: string) =>
-    set(({ todos }) => ({
-      todos: [
-        ...todos,
-        { todo, key: Math.floor(Math.random() * 1000000), done: false },
-      ],
-    })),
+    todos: [],
 
-  toggleTodo: (key: number) =>
-    set(({ todos }) => {
-      const newTodos = todos.map((todo: Todo) => {
-        if (todo.key === key) {
-          return { ...todo, done: !todo.done };
-        }
-        return todo;
-      });
+    fetchTodos: () => service.getTodos(),
 
-      return { todos: newTodos };
-    }),
+    addTodo: (todo: string) => service.postTodo(todo),
 
-  removeTodo: (key: number) =>
-    set(({ todos }) => {
-      const newTodos = todos.filter((todo: Todo) => todo.key !== key);
-      return { todos: newTodos };
-    }),
+    toggleTodo: (key: string) => set(({ todos }) => service.updateTodo(todos, key)),
+
+    removeTodo: (key: string) => service.deleteTodo(key),
+
+    setTodos: (data: any) =>  set(({ todos }) => ({ todos: data }))
+
 }));

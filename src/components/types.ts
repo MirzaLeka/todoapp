@@ -1,7 +1,7 @@
 export type Todo = {
   todo: string;
   done: boolean;
-  key: number;
+  key: string;
 };
 
 export interface TodoProps {
